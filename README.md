@@ -26,4 +26,4 @@ Součástí vytvořeného kontejneru je databáze běžící na portu 3306.
 
 ## Odevzdání
 
-Jak odevzdat svojí aplikaci můžete najít v našich [vzdělávacích materiálech](https://tourde.app/vzdelavaci-materialy/jak-odevzdavat)
+Jak odevzdat svojí aplikaci můžete najít v našich [vzdělávacích materiálech](https://tourde.app/vzdelavaci-materialy/jak-odevzdavat).
