@@ -13,12 +13,18 @@ use App\Http\Controllers\GameController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+//Povinne
 Route::get('/', [HelloController::class, 'view']);
 Route::get('/games', [GameController::class, 'getAll']); 
 Route::post('/games', [GameController::class, 'new']); 
+Route::get('/games/new', [GameController::class, 'newForm']); 
+Route::get('/games/update/{uuid}', [GameController::class, 'updateForm']); 
+Route::put('/games/{uuid}', [GameController::class, 'update']); 
+
 Route::get('/games/{uuid}', [GameController::class, 'get']); 
 Route::put('/games/{uuid}', [GameController::class, 'update']); 
 Route::delete('/games/{uuid}', [GameController::class, 'remove']); 
+
 //odpovedi 
 //201 = vytvorena
 //400 = bad request

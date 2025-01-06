@@ -1,0 +1,34 @@
+/* Základní styl pro tabulku */
+#tictactoe-board {
+    border-collapse: collapse;
+    width: 750px;
+    margin: 0 auto; /* Vycentruje tabulku na stránce */
+}
+
+#tictactoe-board td {
+    width: 50px; /* Každá buňka zaujme 1/3 šířky tabulky */
+    height: 50px; /* Nastavení výšky pro každou buňku */
+    text-align: center;
+    font-size: 2rem; /* Zvětší text pro lepší viditelnost */
+    vertical-align: middle;
+    border: 1px solid #333; /* Okraje pro oddělení buněk */
+    cursor: pointer;
+    background-color: rgb(255, 255, 255); /* Světlé pozadí */
+    transition: background-color 0.2s ease;
+}
+
+/* Efekt při najetí myší */
+#tictactoe-board td:hover {
+    background-color: rgb(220, 220, 220); /* Změní barvu pozadí při najetí */
+}
+
+/* Střídavé barvy pro buňky */
+#tictactoe-board tr:nth-child(odd) td:nth-child(odd),
+#tictactoe-board tr:nth-child(even) td:nth-child(even) {
+    background-color: #ffc5c5; /* Šedé pozadí pro buňky na kříž */
+}
+
+#tictactoe-board tr:nth-child(odd) td:nth-child(odd):hover,
+#tictactoe-board tr:nth-child(even) td:nth-child(even):hover {
+    background-color: #f9adad; /* Šedé pozadí pro buňky na kříž */
+}

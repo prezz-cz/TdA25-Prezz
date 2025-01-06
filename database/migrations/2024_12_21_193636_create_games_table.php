@@ -12,7 +12,7 @@ class CreateGamesTable extends Migration
             $table->uuid('uuid')->primary();
             $table->string('name');
             $table->enum('difficulty', ['beginner', 'easy', 'medium', 'hard', 'extreme']);
-            $table->enum('game_state', ['opening', 'midgame', 'endgame', 'unknown'])->default('unknown');
+            $table->enum('gameState', ['opening', 'midgame', 'endgame', 'unknown'])->default('unknown');
             $table->json('board');
             $table->timestamps();
         });
