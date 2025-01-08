@@ -14,7 +14,8 @@ class CreateGamesTable extends Migration
             $table->enum('difficulty', ['beginner', 'easy', 'medium', 'hard', 'extreme']);
             $table->enum('gameState', ['opening', 'midgame', 'endgame', 'unknown'])->default('unknown');
             $table->json('board');
-            $table->timestamps();
+            $table->timestamp('createdAt');
+            $table->timestamp('updatedAt')->nullable();
         });
     }
 
