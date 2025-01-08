@@ -276,7 +276,13 @@ class GameController extends Controller
                     }
 
                     if ($right || $down || $rightDown)
-                        return "endgame";
+                        if($right && isset($board[$rowI][$cellI + 5]) && $board[$rowI][$cellI + 5] == "")
+                            return "endgame";
+                        if($down && isset($board[$rowI + 5][$cellI]) && $board[$rowI + 5][$cellI] == "")
+                            return "endgame";
+                        if($rightDown && isset($board[$rowI + 5][$cellI + 5]) && $board[$rowI + 5][$cellI + 5] == "")
+                            return "endgame";
+                        
                 }
             }
         }
