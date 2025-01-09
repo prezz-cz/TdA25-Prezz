@@ -187,4 +187,60 @@ class GameApiController extends Controller
 
         return response()->json($game, 204);
     }
+
+    private function updateGameState($board)
+    {
+        $xCount = 0;
+        $oCount = 0;
+
+
+        foreach ($board as $rowI => $row) {
+            foreach ($row as $cellI => $cell) {
+                $right = true;
+                $down = true;
+                $rightDown = true;
+
+                if ($cell === 'X') {
+                    $xCount++;
+                } elseif ($cell === 'O') {
+                    $oCount++;
+                } else {
+                    for ($i = 2; $i < 6; $i++) {
+                        if (isset($board[$rowI][$cellI + $i]) &&($board[$rowI][$cellI + 1] == "X" || $board[$rowI][$cellI + 1] == "O")&& $board[$rowI][$cellI + 1] == $board[$rowI][$cellI + $i] && $right)
+                            $right = true;
+                        else
+                            $right = false;
+
+
+                        if (isset($board[$rowI + $i][$cellI])&&($board[$rowI + 1][$cellI] == "X" || $board[$rowI + 1][$cellI] == "O") && $board[$rowI + 1][$cellI] == $board[$rowI + $i][$cellI] && $down)
+                            $down = true;
+                        else
+                            $down = false;
+
+                        if (isset($board[$rowI + $i][$cellI + $i])&&($board[$rowI + 1][$cellI + 1] == "X" || $board[$rowI + 1][$cellI + 1] == "O") && $board[$rowI + 1][$cellI + 1] == $board[$rowI + $i][$cellI + $i] && $rightDown)
+                            $rightDown = true;
+                        else
+                            $rightDown = false;
+                    }
+
+                    if ($right || $down || $rightDown)
+                        if($right && isset($board[$rowI][$cellI + 5]) && $board[$rowI][$cellI + 5] == "")
+                            return "endgame";
+                        if($down && isset($board[$rowI + 5][$cellI]) && $board[$rowI + 5][$cellI] == "")
+                            return "endgame";
+                        if($rightDown && isset($board[$rowI + 5][$cellI + 5]) && $board[$rowI + 5][$cellI + 5] == "")
+                            return "endgame";
+                        
+                }
+            }
+        }
+        if ($xCount != $oCount && $xCount != $oCount + 1)
+            return null;
+
+        if ($oCount < 5)
+            return "opening";
+        else {
+            return "midgame";
+        }
+    }
 }
