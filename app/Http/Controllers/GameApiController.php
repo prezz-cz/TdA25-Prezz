@@ -3,52 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
-use App\Http\Requests\GameRequest;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
-
-class GameController extends Controller
+class GameApiController extends Controller
 {
-
-    //*  200 = Vsechny hry
     public function getAll()
     {
         $games = Game::all();
-        return view('components/schemas/Games', compact('games'));
+        return response()->json($games, 200);
     }
 
-    //*  {
-    //*      "name": "Moje první hra",
-    //*      "difficulty": "hard",
-    //*      "board": "[15x[15x'']"
-    //*  }
-    //*  201 = Hra úspěšně vytvořena.
-    //!  400 = Bad request: ${reason}
-    //!  422 = Semantic error: ${reason}
-    // [
-    //     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "X", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "X", "", "", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "", "", "O", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "X", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "O", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "X", "", "", "", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    //     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-    //     ["O", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
-    // ]
+    public function get($uuid)
+    {
+        $game = Game::where('uuid', $uuid)->first();
+
+        if (!$game) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Resource not found'
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return response()->json($game, 200);
+    }
 
     public function new(Request $request)
     {
-        // Převod textarea obsahu na pole
         $request['board'] = json_decode($request['board'], true);
 
         $validator400 = Validator::make(
@@ -109,58 +93,20 @@ class GameController extends Controller
             'createdAt' => now(),
             'name' => $request['name'],
             'difficulty' => $request['difficulty'],
-            'gameState' => $gameState,
+            // 'gameState' => $gameState,
+            'gameState' => 'opening',
             'board' => $request['board'],
         ]);
 
-        if ($game->save()) {
-            return redirect('/games')->with('success', 'Game created successfully!');
-        } else {
+        if ($game->save())
+            return response()->json($game, 201);
+        else
             dd('Game save failed');
-        }
     }
 
-    public function newForm()
+
+    public function update($uuid, Request $request)
     {
-        $title = 'Vytvořit novou hru';
-        return view('components.schemas.NewUpdateGame', compact('title'));
-    }
-
-    //*  200 = 
-    //*  {
-    //*      "uuid": "67fda282-2bca-41ef-9caf-039cc5c8dd69",
-    //*      "createdAt": "2025-01-03T17:03:19.527Z",
-    //*      "updatedAt": "2025-01-03T17:03:19.527Z",
-    //*      "name": "Moje první hra",
-    //*      "difficulty": "hard",
-    //*      "gameState": "midgame",
-    //*      "board": "[15x[15x'']"
-    //*  }
-    //!  404 = Resource not found
-
-    public function get($uuid)
-    {
-        $game = Game::findOrFail($uuid);
-
-        return view('components/schemas/Game', compact('game'));
-    }
-
-    //*  200 = 
-    //*  {
-    //*      "uuid": "67fda282-2bca-41ef-9caf-039cc5c8dd69",
-    //*      "createdAt": "2025-01-03T17:03:19.527Z",
-    //*      "updatedAt": "2025-01-03T17:03:19.527Z",
-    //*      "name": "Moje první hra",
-    //*      "difficulty": "hard",
-    //*      "gameState": "midgame",
-    //*      "board": "[15x[15x'']"
-    //*  }
-    //!  400 = Bad request: ${reason}
-    //!  404 = Resource not found
-    //!  422 = Semantic error: ${reason}
-    public function update(Request $request, $uuid)
-    {
-        // dd($request);
         $request['board'] = json_decode($request['board'], true);
 
         $validator400 = Validator::make(
@@ -214,32 +160,33 @@ class GameController extends Controller
                 'error' => 'Semantic error',
                 'messages' => 'The count of X must be same or 1 higher than O',
             ], 422);
-        
+
         $game = Game::findOrFail($uuid);
         $game->name = $request->input('name');
         $game->difficulty = $request->input('difficulty');
         $game->board = $request->input('board');
         $game->updatedAt = now();
         $game->gameState = $gameState;
-        $game->update();
-        return redirect("/games/$uuid");
+        if ($game->update())
+            return response()->json($game, 200);
+        else
+            dd('Game update failed');
     }
 
-    public function updateForm(Request $request, $uuid)
-    {
-        $title = 'Změnit hru';
-        $data = Game::findOrFail($uuid);
-        return view('components.schemas.UpdateGame', compact('title', 'data'));
-    }
-
-    //!  404 = Resource not found
     public function remove($uuid)
     {
-        $game = Game::findOrFail($uuid);
-        $game->delete();
-        return redirect('/games');
-    }
+        $game = Game::where('uuid', $uuid)->first();
 
+        if (!$game) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Resource not found'
+            ], Response::HTTP_NOT_FOUND);
+        }
+        $game->delete();
+
+        return response()->json($game, 204);
+    }
 
     private function updateGameState($board)
     {
