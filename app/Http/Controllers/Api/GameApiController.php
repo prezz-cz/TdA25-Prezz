@@ -104,9 +104,8 @@ class GameApiController extends Controller
     }
 
 
-    public function update(Request $request, $uuid)
+    public function update($uuid, Request $request)
     {
-        // return $request;
         $request['board'] = json_decode($request['board'], true);
 
         $validator400 = Validator::make(
