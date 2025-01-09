@@ -106,6 +106,7 @@ class GameApiController extends Controller
 
     public function update(Request $request, $uuid)
     {
+        // return $request;
         $request['board'] = json_decode($request['board'], true);
 
         $validator400 = Validator::make(
@@ -166,7 +167,6 @@ class GameApiController extends Controller
         $game->board = $request->input('board');
         $game->updatedAt = now();
         $game->gameState = $gameState;
-        $game->update();
         if ($game->update())
             return response()->json($game, 200);
         else

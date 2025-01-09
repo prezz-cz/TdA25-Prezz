@@ -160,6 +160,7 @@ class GameController extends Controller
     //!  422 = Semantic error: ${reason}
     public function update(Request $request, $uuid)
     {
+        // dd($request);
         $request['board'] = json_decode($request['board'], true);
 
         $validator400 = Validator::make(
