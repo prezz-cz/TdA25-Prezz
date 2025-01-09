@@ -32,9 +32,8 @@ class GameApiController extends Controller
     }
 
     public function new(Request $request)
-    {
-        $request['board'] = json_decode($request['board'], true);
-
+    {    
+        // Validační pravidla a jejich aplikace
         $validator400 = Validator::make(
             $request->all(),
             [
@@ -48,13 +47,13 @@ class GameApiController extends Controller
                 'board.required' => 'The game board is required.',
             ]
         );
-
+    
         $validator422 = Validator::make($request->all(), [
             'name' => 'string|max:255',
             'difficulty' => 'in:beginner,easy,medium,hard,extreme',
-            'board' => 'array|size:15',
-            'board.*' => 'array|size:15',
-            'board.*.*' => 'nullable|string|in:X,O,',
+            'board' => 'array|size:15', // Validace počtu řádků
+            'board.*' => 'array|size:15', // Validace počtu sloupců v každém řádku
+            'board.*.*' => 'nullable|string|in:X,O, null, "",', // Validace obsahu každé buňky
         ], [
             'name.string' => 'The game name must be a string.',
             'difficulty.in' => 'The difficulty level must be one of: beginner, easy, medium, hard, extreme.',
@@ -64,7 +63,9 @@ class GameApiController extends Controller
             'board.*.size' => 'Each row of the game board must have exactly 15 columns.',
             'board.*.*.in' => 'Each cell of the board must contain X, O, or an empty string.',
         ]);
+        
 
+        // Validace: pokud některá pravidla selžou
         if ($validator400->fails()) {
             return response()->json([
                 'status' => 400,
@@ -78,37 +79,44 @@ class GameApiController extends Controller
                 'messages' => $validator422->errors(),
             ], 422);
         }
-
-        $gameState = $this->updateGameState($request['board']);
-        if ($gameState == null)
+    
+        // Získání validovaných dat
+        $data = $validator400->validated();
+    
+        // Ověření gameState
+        $gameState = $this->updateGameState($data['board']);
+        if ($gameState == null) {
             return response()->json([
                 'status' => 422,
                 'error' => 'Semantic error',
                 'messages' => 'The count of X must be same or 1 higher than O',
             ], 422);
-
+        }
+    
         // Vytvoření nové hry
         $game = new Game([
             'uuid' => Str::uuid(),
             'createdAt' => now(),
-            'name' => $request['name'],
-            'difficulty' => $request['difficulty'],
-            // 'gameState' => $gameState,
-            'gameState' => 'opening',
-            'board' => $request['board'],
+            'name' => $data['name'],
+            'difficulty' => $data['difficulty'],
+            'gameState' => 'opening', // Příklad
+            'board' => $data['board'],
         ]);
-
-        if ($game->save())
+    
+        if ($game->save()) {
             return response()->json($game, 201);
-        else
-            dd('Game save failed');
+        } else {
+            return response()->json(['error' => 'Game save failed'], 500);
+        }
     }
+    
 
 
     public function update($uuid, Request $request)
     {
-        $request['board'] = json_decode($request['board'], true);
-
+        // Dekódování JSON formátu 'board' na PHP pole
+    
+        // Validace 400: Základní validace, jestli jsou požadované hodnoty přítomné
         $validator400 = Validator::make(
             $request->all(),
             [
@@ -122,13 +130,14 @@ class GameApiController extends Controller
                 'board.required' => 'The game board is required.',
             ]
         );
-
+    
+        // Validace 422: Validace hodnot a formátu dat
         $validator422 = Validator::make($request->all(), [
             'name' => 'string|max:255',
             'difficulty' => 'in:beginner,easy,medium,hard,extreme',
-            'board' => 'array|size:15',
-            'board.*' => 'array|size:15',
-            'board.*.*' => 'nullable|string|in:X,O,',
+            'board' => 'array|size:15', // Board musí mít 15 řádků
+            'board.*' => 'array|size:15', // Každý řádek musí mít 15 sloupců
+            'board.*.*' => 'nullable|string|in:X,O,', // Hodnoty: null, X, O, nebo prázdný řetězec
         ], [
             'name.string' => 'The game name must be a string.',
             'difficulty.in' => 'The difficulty level must be one of: beginner, easy, medium, hard, extreme.',
@@ -138,39 +147,54 @@ class GameApiController extends Controller
             'board.*.size' => 'Each row of the game board must have exactly 15 columns.',
             'board.*.*.in' => 'Each cell of the board must contain X, O, or an empty string.',
         ]);
-
+    
+        // Chyba 400: Pokud základní validace selže
         if ($validator400->fails()) {
             return response()->json([
                 'status' => 400,
                 'error' => 'Bad request',
                 'messages' => $validator400->errors(),
             ], 400);
-        } else if ($validator422->fails()) {
+        }
+    
+        // Chyba 422: Pokud validace hodnot a formátu selže
+        if ($validator422->fails()) {
             return response()->json([
                 'status' => 422,
                 'error' => 'Semantic error',
                 'messages' => $validator422->errors(),
             ], 422);
         }
-
+    
+        // Validace stavu hry: Kontrola počtu X a O
         $gameState = $this->updateGameState($request['board']);
-        if ($gameState == null)
+        if ($gameState == null) {
             return response()->json([
                 'status' => 422,
                 'error' => 'Semantic error',
-                'messages' => 'The count of X must be same or 1 higher than O',
+                'messages' => 'The count of X must be the same or 1 higher than O',
             ], 422);
-
+        }
+    
+        // Najít hru podle UUID
         $game = Game::findOrFail($uuid);
         $game->name = $request->input('name');
         $game->difficulty = $request->input('difficulty');
         $game->board = $request->input('board');
         $game->updatedAt = now();
         $game->gameState = $gameState;
-        if ($game->update())
+    
+        // Uložit změny hry
+        if ($game->update()) {
             return response()->json($game, 200);
-        else
-            dd('Game update failed');
+        } else {
+            // Pokud se aktualizace nepodaří
+            return response()->json([
+                'status' => 500,
+                'error' => 'Internal Server Error',
+                'message' => 'Failed to update the game.',
+            ], 500);
+        }
     }
 
     public function remove($uuid)

@@ -21,7 +21,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/', function () {
         return response()->json(['organization' => 'Student Cyber Games']);
     });
-    
+
     Route::get('/games', [GameApiController::class, 'getAll']);
     Route::post('/games', [GameApiController::class, 'new']);
     Route::get('/games/{uuid}', [GameApiController::class, 'get']);
