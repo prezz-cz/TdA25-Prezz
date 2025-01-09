@@ -18,8 +18,8 @@ class Game extends Model
     // gameState - string[opening, midgame, endgame, unknown], notNull, readOnly
     // board [15x[15x'']]
 
-    const CREATED_AT = 'createdAt';
-    const UPDATED_AT = 'updatedAt';
+    // const CREATED_AT = 'createdAt';
+    // const UPDATED_AT = 'updatedAt';
 
     //primaryKey
     public $incrementing = false;

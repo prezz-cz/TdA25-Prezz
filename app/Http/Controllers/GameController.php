@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Http;
 
 class GameController extends Controller
 {
@@ -16,7 +16,18 @@ class GameController extends Controller
     //*  200 = Vsechny hry
     public function getAll()
     {
-        $games = Game::all();
+        try {
+            $response = Http::get('http://127.0.0.1:8000/api/v1/games');
+            dd($response->status(), $response->body());
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }        
+        if ($response->ok()) {
+            $games = $response->json(); 
+        } else {
+            $games = [];
+        }
+
         return view('components/schemas/Games', compact('games'));
     }
 
@@ -48,75 +59,14 @@ class GameController extends Controller
 
     public function new(Request $request)
     {
-        // Převod textarea obsahu na pole
-        $request['board'] = json_decode($request['board'], true);
+        $response = Http::post(url('/api/v1/games'), $request->all());
 
-        $validator400 = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required',
-                'difficulty' => 'required',
-                'board' => 'required',
-            ],
-            [
-                'name.required' => 'The game name is required.',
-                'difficulty.required' => 'The difficulty level is required.',
-                'board.required' => 'The game board is required.',
-            ]
-        );
-
-        $validator422 = Validator::make($request->all(), [
-            'name' => 'string|max:255',
-            'difficulty' => 'in:beginner,easy,medium,hard,extreme',
-            'board' => 'array|size:15',
-            'board.*' => 'array|size:15',
-            'board.*.*' => 'nullable|string|in:X,O,',
-        ], [
-            'name.string' => 'The game name must be a string.',
-            'difficulty.in' => 'The difficulty level must be one of: beginner, easy, medium, hard, extreme.',
-            'board.array' => 'The game board must be an array.',
-            'board.size' => 'The game board must have exactly 15 rows.',
-            'board.*.array' => 'Each row of the game board must be an array.',
-            'board.*.size' => 'Each row of the game board must have exactly 15 columns.',
-            'board.*.*.in' => 'Each cell of the board must contain X, O, or an empty string.',
-        ]);
-
-        if ($validator400->fails()) {
-            return response()->json([
-                'status' => 400,
-                'error' => 'Bad request',
-                'messages' => $validator400->errors(),
-            ], 400);
-        } else if ($validator422->fails()) {
-            return response()->json([
-                'status' => 422,
-                'error' => 'Semantic error',
-                'messages' => $validator422->errors(),
-            ], 422);
-        }
-
-        $gameState = $this->updateGameState($request['board']);
-        if ($gameState == null)
-            return response()->json([
-                'status' => 422,
-                'error' => 'Semantic error',
-                'messages' => 'The count of X must be same or 1 higher than O',
-            ], 422);
-
-        // Vytvoření nové hry
-        $game = new Game([
-            'uuid' => Str::uuid(),
-            'createdAt' => now(),
-            'name' => $request['name'],
-            'difficulty' => $request['difficulty'],
-            'gameState' => $gameState,
-            'board' => $request['board'],
-        ]);
-
-        if ($game->save()) {
-            return redirect('/games')->with('success', 'Game created successfully!');
+        if ($response->successful()) {
+            $game = $response->json(); 
+            return view('components.schemas.GameDetail', compact('game')); 
         } else {
-            dd('Game save failed');
+            $error = $response->json(); 
+            return back()->withErrors(['error' => $error['message'] ?? 'Došlo k chybě při vytvoření hry.']);
         }
     }
 
@@ -140,9 +90,11 @@ class GameController extends Controller
 
     public function get($uuid)
     {
-        $game = Game::findOrFail($uuid);
+        $response = Http::get(url('/api/v1/game/$uuid')); 
+        $game = $response->json();
 
-        return view('components/schemas/Game', compact('game'));
+        if ($response->successful()) 
+            return view('components/schemas/Game', compact('game'));     
     }
 
     //*  200 = 
@@ -160,68 +112,12 @@ class GameController extends Controller
     //!  422 = Semantic error: ${reason}
     public function update(Request $request, $uuid)
     {
-        $request['board'] = json_decode($request['board'], true);
+        $response = Http::put(url('/api/v1/games'), $request->all());
+        $game = $response->json(); 
 
-        $validator400 = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required',
-                'difficulty' => 'required',
-                'board' => 'required',
-            ],
-            [
-                'name.required' => 'The game name is required.',
-                'difficulty.required' => 'The difficulty level is required.',
-                'board.required' => 'The game board is required.',
-            ]
-        );
-
-        $validator422 = Validator::make($request->all(), [
-            'name' => 'string|max:255',
-            'difficulty' => 'in:beginner,easy,medium,hard,extreme',
-            'board' => 'array|size:15',
-            'board.*' => 'array|size:15',
-            'board.*.*' => 'nullable|string|in:X,O,',
-        ], [
-            'name.string' => 'The game name must be a string.',
-            'difficulty.in' => 'The difficulty level must be one of: beginner, easy, medium, hard, extreme.',
-            'board.array' => 'The game board must be an array.',
-            'board.size' => 'The game board must have exactly 15 rows.',
-            'board.*.array' => 'Each row of the game board must be an array.',
-            'board.*.size' => 'Each row of the game board must have exactly 15 columns.',
-            'board.*.*.in' => 'Each cell of the board must contain X, O, or an empty string.',
-        ]);
-
-        if ($validator400->fails()) {
-            return response()->json([
-                'status' => 400,
-                'error' => 'Bad request',
-                'messages' => $validator400->errors(),
-            ], 400);
-        } else if ($validator422->fails()) {
-            return response()->json([
-                'status' => 422,
-                'error' => 'Semantic error',
-                'messages' => $validator422->errors(),
-            ], 422);
-        }
-
-        $gameState = $this->updateGameState($request['board']);
-        if ($gameState == null)
-            return response()->json([
-                'status' => 422,
-                'error' => 'Semantic error',
-                'messages' => 'The count of X must be same or 1 higher than O',
-            ], 422);
+        if ($response->successful()) 
+            return view('components.schemas.GameDetail', compact('game')); 
         
-        $game = Game::findOrFail($uuid);
-        $game->name = $request->input('name');
-        $game->difficulty = $request->input('difficulty');
-        $game->board = $request->input('board');
-        $game->updatedAt = now();
-        $game->gameState = $gameState;
-        $game->update();
-        return redirect("/games/$uuid");
     }
 
     public function updateForm(Request $request, $uuid)
@@ -234,9 +130,10 @@ class GameController extends Controller
     //!  404 = Resource not found
     public function remove($uuid)
     {
-        $game = Game::findOrFail($uuid);
-        $game->delete();
-        return redirect('/games');
+        $response = Http::remove(url('/api/v1/game/$uuid')); 
+
+        if ($response->successful()) 
+            return redirect('/games');
     }
 
 
