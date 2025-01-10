@@ -109,7 +109,7 @@ class GameApiController extends Controller
             'createdAt' => now(),
             'name' => $data['name'],
             'difficulty' => $data['difficulty'],
-            'gameState' => 'opening', // Příklad
+            'gameState' => $gameState, // Příklad
             'board' => $data['board'],
         ]);
     
