@@ -82,7 +82,7 @@ class GameApiController extends Controller
     
         // Získání validovaných dat
         $data = $validator400->validated();
-    
+        
         // Ověření gameState
         $gameState = $this->updateGameState($data['board']);
         if ($gameState == null) {
@@ -92,8 +92,18 @@ class GameApiController extends Controller
                 'messages' => 'The count of X must be same or 1 higher than O',
             ], 422);
         }
-    
-        // Vytvoření nové hry
+        
+
+        foreach ($data['board'] as &$row) { 
+            foreach ($row as &$column) { 
+                if ($column === null) {
+                    $column = ''; 
+                }
+            }
+        }
+        unset($row);    
+        unset($column); 
+
         $game = new Game([
             'uuid' => Str::uuid(),
             'createdAt' => now(),
@@ -104,7 +114,9 @@ class GameApiController extends Controller
         ]);
     
         if ($game->save()) {
-            return response()->json($game, 201);
+            // return response()->json($game, 201);
+            return response($data['board'], 201);
+
         } else {
             return response()->json(['error' => 'Game save failed'], 500);
         }
