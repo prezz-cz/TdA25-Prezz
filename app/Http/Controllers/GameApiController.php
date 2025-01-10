@@ -115,7 +115,7 @@ class GameApiController extends Controller
     
         if ($game->save()) {
             // return response()->json($game, 201);
-            return response($data['board'], 201);
+            return response($game, 201);
 
         } else {
             return response()->json(['error' => 'Game save failed'], 500);
