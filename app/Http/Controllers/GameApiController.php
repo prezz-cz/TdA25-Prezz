@@ -187,12 +187,20 @@ class GameApiController extends Controller
                 'messages' => 'The count of X must be the same or 1 higher than O',
             ], 422);
         }
-    
+        $board = $request->input('board');
+
+        foreach ($board as &$row) { 
+            foreach ($row as &$column) { 
+                if ($column === null) {
+                    $column = ''; 
+                }
+            }
+        }
         // Najít hru podle UUID
         $game = Game::findOrFail($uuid);
         $game->name = $request->input('name');
         $game->difficulty = $request->input('difficulty');
-        $game->board = $request->input('board');
+        $game->board = $board;
         $game->updatedAt = now();
         $game->gameState = $gameState;
     
