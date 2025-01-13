@@ -262,7 +262,7 @@ class GameApiController extends Controller
         }
     
         // Stav hry podle počtu tahů
-        if ($oCount <= 5) {
+        if ($oCount <= 4) {
             return "opening";
         } else {
             return "midgame";
