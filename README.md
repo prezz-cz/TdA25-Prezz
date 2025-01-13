@@ -2,9 +2,9 @@
 
 # PREZZ
 
-<div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-    <div style="width: 30%; text-align: center;">
-        <img src="image.png" alt="Pata" style="width: 80%">
+<div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+    <div style="flex: 1 1 30%; text-align: center;">
+        <img src="image.png" alt="Pata" style="width: 100%;">
         <p style="font-size: 25px;">Richard Hývl</p>
         <ul>
             <li>Back-endový Mág</li>
@@ -12,8 +12,8 @@
             <li>Banik pyco</li>
         </ul>
     </div>
-    <div style="width: 30%; text-align: center;">
-        <img src="image-1.png" alt="Kuca" style="width: 80%">
+    <div style="flex: 1 1 30%; text-align: center;">
+        <img src="image-1.png" alt="Kuca" style="width: 100%;">
         <p style="font-size: 25px;">Ondřej Kučera</p>
         <ul>
             <li>neco pyco</li>
@@ -21,8 +21,8 @@
             <li>neco pyco</li>
         </ul>
     </div>
-    <div style="width: 30%; text-align: center;">
-        <img src="image-2.png" alt="Peta" style="width: 80%">
+    <div style="flex: 1 1 30%; text-align: center;">
+        <img src="image-2.png" alt="Peta" style="width: 100%;">
         <p style="font-size: 25px;">Petr Machovec</p>
         <ul>
             <li>neco pyco</li>
