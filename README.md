@@ -5,7 +5,7 @@
 <div style="display: flex; justify-content:space-between;">
 <div style="width: 20%">
 
-![@projektant-pata](image.png)
+<img src="image.png" alt="Pata" style="width: 100%">
 <p style="font-size: 25px; text-align:center;">Richard Hývl</p>
 <ul>
     <li>Back-endový Mág</li>
@@ -16,7 +16,7 @@
 </div>
 <div style="width: 20%">
 
-![@kucendro](image-1.png)
+<img src="image-1.png" alt="Kuca" style="width: 100%">
 <p style="font-size: 25px; text-align:center;">Ondřej Kučera</p>
 <ul>
     <li>neco pyco</li>
@@ -28,7 +28,7 @@
 </div>
 <div style="width: 20%"">
 
-![@machovec](image-2.png)
+<img src="image-2.png" alt="Peta" style="width: 100%">
 <p style="font-size: 25px; text-align:center;">Petr Machovec</p>
 
 <ul>
