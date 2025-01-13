@@ -2,42 +2,34 @@
 
 # PREZZ
 
-<div style="display: flex; justify-content:space-between;">
-<div style="width: 20%">
-
-<img src="image.png" alt="Pata" style="width: 30%">
-<p style="font-size: 25px; text-align:center;">Richard Hývl</p>
-<ul>
-    <li>Back-endový Mág</li>
-    <li>Vášnivý Šachysta</li>
-    <li>Banik pyco</li>
-</ul>
-
-</div>
-<div style="width: 20%">
-
-<img src="image-1.png" alt="Kuca" style="width: 30%">
-<p style="font-size: 25px; text-align:center;">Ondřej Kučera</p>
-<ul>
-    <li>neco pyco</li>
-    <li>neco pyco</li>
-    <li>neco pyco</li>
-
-</ul>
-
-</div>
-<div style="width: 20%"">
-
-<img src="image-2.png" alt="Peta" style="width: 30%">
-<p style="font-size: 25px; text-align:center;">Petr Machovec</p>
-
-<ul>
-    <li>neco pyco</li>
-    <li>neco pyco</li>
-    <li>neco pyco</li>
-
-</ul>
-</div>
+<div style="display: flex; justify-content: space-between;">
+    <div style="width: 30%">
+        <img src="image.png" alt="Pata" style="width: 100%">
+        <p style="font-size: 25px; text-align:center;">Richard Hývl</p>
+        <ul>
+            <li>Back-endový Mág</li>
+            <li>Vášnivý Šachysta</li>
+            <li>Banik pyco</li>
+        </ul>
+    </div>
+    <div style="width: 30%">
+        <img src="image-1.png" alt="Kuca" style="width: 100%">
+        <p style="font-size: 25px; text-align:center;">Ondřej Kučera</p>
+        <ul>
+            <li>neco pyco</li>
+            <li>neco pyco</li>
+            <li>neco pyco</li>
+        </ul>
+    </div>
+    <div style="width: 30%">
+        <img src="image-2.png" alt="Peta" style="width: 100%">
+        <p style="font-size: 25px; text-align:center;">Petr Machovec</p>
+        <ul>
+            <li>neco pyco</li>
+            <li>neco pyco</li>
+            <li>neco pyco</li>
+        </ul>
+    </div>
 </div>
 
 ## 🛠️ Technologie
