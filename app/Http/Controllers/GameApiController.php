@@ -236,55 +236,76 @@ class GameApiController extends Controller
     {
         $xCount = 0;
         $oCount = 0;
-
-
+    
         foreach ($board as $rowI => $row) {
             foreach ($row as $cellI => $cell) {
-                $right = true;
-                $down = true;
-                $rightDown = true;
-
                 if ($cell === 'X') {
                     $xCount++;
                 } elseif ($cell === 'O') {
                     $oCount++;
                 } else {
-                    for ($i = 2; $i < 6; $i++) {
-                        if (isset($board[$rowI][$cellI + $i]) &&($board[$rowI][$cellI + 1] == "X" || $board[$rowI][$cellI + 1] == "O")&& $board[$rowI][$cellI + 1] == $board[$rowI][$cellI + $i] && $right)
-                            $right = true;
-                        else
-                            $right = false;
-
-
-                        if (isset($board[$rowI + $i][$cellI])&&($board[$rowI + 1][$cellI] == "X" || $board[$rowI + 1][$cellI] == "O") && $board[$rowI + 1][$cellI] == $board[$rowI + $i][$cellI] && $down)
-                            $down = true;
-                        else
-                            $down = false;
-
-                        if (isset($board[$rowI + $i][$cellI + $i])&&($board[$rowI + 1][$cellI + 1] == "X" || $board[$rowI + 1][$cellI + 1] == "O") && $board[$rowI + 1][$cellI + 1] == $board[$rowI + $i][$cellI + $i] && $rightDown)
-                            $rightDown = true;
-                        else
-                            $rightDown = false;
+                    // Zkontroluj všechny směry
+                    if (
+                        $this->checkDirection($board, $rowI, $cellI, 0, 1) || // Horizontálně
+                        $this->checkDirection($board, $rowI, $cellI, 1, 0) || // Vertikálně
+                        $this->checkDirection($board, $rowI, $cellI, 1, 1)    // Diagonálně
+                    ) {
+                        return "endgame";
                     }
-
-                    if ($right || $down || $rightDown)
-                        if($right && isset($board[$rowI][$cellI + 5]) && $board[$rowI][$cellI + 5] == "")
-                            return "endgame";
-                        if($down && isset($board[$rowI + 5][$cellI]) && $board[$rowI + 5][$cellI] == "")
-                            return "endgame";
-                        if($rightDown && isset($board[$rowI + 5][$cellI + 5]) && $board[$rowI + 5][$cellI + 5] == "")
-                            return "endgame";
-                        
                 }
             }
         }
-        if ($xCount != $oCount && $xCount != $oCount + 1)
-            return null;
-
-        if ($oCount <= 5)
+    
+        // Validace počtu tahů
+        if ($xCount != $oCount && $xCount != $oCount + 1) {
+            return null; // Neplatná hrací deska
+        }
+    
+        // Stav hry podle počtu tahů
+        if ($oCount <= 5) {
             return "opening";
-        else {
+        } else {
             return "midgame";
         }
     }
+    
+    // Funkce pro kontrolu daného směru
+    private function checkDirection($board, $rowI, $cellI, $rowDir, $colDir)
+    {
+        $player = null; // Hráč, kterého sledujeme
+        $count = 0; // Počet po sobě jdoucích symbolů
+    
+        for ($i = 1; $i <= 4; $i++) {
+            $nextRow = $rowI + $i * $rowDir;
+            $nextCol = $cellI + $i * $colDir;
+    
+            if (!isset($board[$nextRow][$nextCol]) || $board[$nextRow][$nextCol] === '') {
+                break; // Konec sekvence
+            }
+    
+            if ($player === null) {
+                $player = $board[$nextRow][$nextCol]; // Nastavíme hráče
+            } elseif ($board[$nextRow][$nextCol] !== $player) {
+                return false; // Není souvislá sekvence
+            }
+    
+            $count++;
+        }
+    
+        // Zkontroluj, zda je sekvence 4 dlouhá a z obou stran neblokovaná
+        if ($count === 4) {
+            $beforeRow = $rowI - $rowDir;
+            $beforeCol = $cellI - $colDir;
+            $afterRow = $rowI + 5 * $rowDir;
+            $afterCol = $cellI + 5 * $colDir;
+    
+            $before = !isset($board[$beforeRow][$beforeCol]) || $board[$beforeRow][$beforeCol] === '';
+            $after = !isset($board[$afterRow][$afterCol]) || $board[$afterRow][$afterCol] === '';
+    
+            return $before || $after; // Musí být alespoň z jedné strany otevřené
+        }
+    
+        return false;
+    }
+    
 }
