@@ -281,7 +281,7 @@ class GameApiController extends Controller
         if ($xCount != $oCount && $xCount != $oCount + 1)
             return null;
 
-        if ($oCount < 5)
+        if ($oCount <= 5)
             return "opening";
         else {
             return "midgame";
