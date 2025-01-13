@@ -2,8 +2,8 @@
 
 # PREZZ
 
-<div style="display: flex; justify-content:center;">
-<div style="padding: 0 20px; width: 30%">
+<div style="display: flex; justify-content:space-between;">
+<div style="width: 30%">
 
 ![@projektant-pata](image.png)
 <p style="font-size: 25px; text-align:center;">Richard Hývl</p>
