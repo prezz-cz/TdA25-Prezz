@@ -14,7 +14,7 @@
 </ul>
 
 </div>
-<div style="padding: 0 20px; width: 30%"">
+<div style="width: 30%">
 
 ![@kucendro](image-1.png)
 <p style="font-size: 25px; text-align:center;">Ondřej Kučera</p>
@@ -26,7 +26,7 @@
 </ul>
 
 </div>
-<div style="padding: 0 20px; width: 30%"">
+<div style="width: 30%"">
 
 ![@machovec](image-2.png)
 <p style="font-size: 25px; text-align:center;">Petr Machovec</p>
