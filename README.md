@@ -3,7 +3,7 @@
 # PREZZ
 
 <div style="display: flex; justify-content:space-between;">
-<div style="width: 30%">
+<div style="width: 20%">
 
 ![@projektant-pata](image.png)
 <p style="font-size: 25px; text-align:center;">Richard Hývl</p>
@@ -14,7 +14,7 @@
 </ul>
 
 </div>
-<div style="width: 30%">
+<div style="width: 20%">
 
 ![@kucendro](image-1.png)
 <p style="font-size: 25px; text-align:center;">Ondřej Kučera</p>
@@ -26,7 +26,7 @@
 </ul>
 
 </div>
-<div style="width: 30%"">
+<div style="width: 20%"">
 
 ![@machovec](image-2.png)
 <p style="font-size: 25px; text-align:center;">Petr Machovec</p>
