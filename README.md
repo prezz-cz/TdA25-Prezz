@@ -2,7 +2,7 @@
 
 # PREZZ
 
-<div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+<div style="display: flex; justify-content: space-between; flex-direction: row; gap: 20px;">
     <div style="flex: 1 1 30%; text-align: center;">
         <img src="image.png" alt="Pata" style="width: 100%;">
         <p style="font-size: 25px;">Richard Hývl</p>
