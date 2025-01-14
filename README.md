@@ -10,9 +10,6 @@ Back-endový Mág|Seamus Finnigan Back-endu 🧙🏻‍♂️|Front-end Boss
 Vášnivý Šachysta|Dancer 💃🕺 |Milovník rapu
 Banik pyco|Poslouchá Jazz WTF|Sigma
 
-
-
-
 ## 🛠️ Technologie
 
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
@@ -22,12 +19,18 @@ Banik pyco|Poslouchá Jazz WTF|Sigma
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 
 ## 🏃 Lokální spuštění
+Naklonujte repozitář z GitHub a ve složce otevřete terminál.
+Je žádoucí mít nainstalován potřebný software.
+
 ### 1. Software
 #### Windows
 - [WSL2 (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/install)
 - [Docker](https://www.docker.com/)
 
 #### Linux
+- [Docker](https://www.docker.com/)
+
+#### Mac
 - [Docker](https://www.docker.com/)
 
 ### 2. Příkaz do terminálu
