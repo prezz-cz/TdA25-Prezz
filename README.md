@@ -2,35 +2,16 @@
 
 # PREZZ
 
-<div style="display: flex; justify-content: space-between; flex-direction: row; gap: 20px;">
-    <div style="flex: 1 1 30%; text-align: center;">
-        <img src="image.png" alt="Pata" style="width: 100%;">
-        <p style="font-size: 25px;">Richard Hývl</p>
-        <ul>
-            <li>Back-endový Mág</li>
-            <li>Vášnivý Šachysta</li>
-            <li>Banik pyco</li>
-        </ul>
-    </div>
-    <div style="flex: 1 1 30%; text-align: center;">
-        <img src="image-1.png" alt="Kuca" style="width: 100%;">
-        <p style="font-size: 25px;">Ondřej Kučera</p>
-        <ul>
-            <li>neco pyco</li>
-            <li>neco pyco</li>
-            <li>neco pyco</li>
-        </ul>
-    </div>
-    <div style="flex: 1 1 30%; text-align: center;">
-        <img src="image-2.png" alt="Peta" style="width: 100%;">
-        <p style="font-size: 25px;">Petr Machovec</p>
-        <ul>
-            <li>neco pyco</li>
-            <li>neco pyco</li>
-            <li>neco pyco</li>
-        </ul>
-    </div>
-</div>
+
+Richard Hývl|Ondřej Kučera|Petr Machovec
+:-------------------------:|:-------------------------:|:-------------------------:
+![](image.png)|![](image-1.png)|![](image-2.png) 
+Back-endový Mág|Seamus Finnigan Back-endu 🧙🏻‍♂️|Front-end Boss
+Vášnivý Šachysta|Dancer 💃🕺 |Milovník rapu
+Banik pyco|Ten s 3D tiskárnou|Sigma
+
+
+
 
 ## 🛠️ Technologie
 
