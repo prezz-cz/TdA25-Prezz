@@ -8,7 +8,7 @@ Richard Hývl|Ondřej Kučera|Petr Machovec
 ![](image.png)|![](image-1.png)|![](image-2.png) 
 Back-endový Mág|Seamus Finnigan Back-endu 🧙🏻‍♂️|Front-end Boss
 Vášnivý Šachysta|Dancer 💃🕺 |Milovník rapu
-Banik pyco|Ten s 3D tiskárnou|Sigma
+Banik pyco|Poslouchá Jazz WTF|Sigma
 
 
 
