@@ -1,7 +1,15 @@
-FROM tourdeapp/php-8.1
+FROM node:16
 
-COPY . /app
+WORKDIR /frontend
 
-EXPOSE 80
+COPY frontend/package*.json ./
 
-CMD ["/app/start.sh"]
+RUN npm install
+
+RUN npm install react-router-dom axios
+
+COPY frontend /frontend
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
