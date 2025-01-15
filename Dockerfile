@@ -1,14 +1,14 @@
 FROM node:16
 
-WORKDIR /frontend
+WORKDIR /piskvorky
 
-COPY frontend/package*.json ./
+COPY piskvorky/package*.json ./
 
 RUN npm install
 
 RUN npm install react-router-dom axios
 
-COPY frontend /frontend
+COPY piskvorky /piskvorky
 
 EXPOSE 3000
 
