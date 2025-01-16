@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/games');
+        const response = await axios.get('/api/v1/games');
         setGames(response.data);
       } catch (err) {
         setError('Failed to fetch games.');

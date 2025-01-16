@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const CreateGame = async (gameData, navigate) => {
     try {
-        const response = await axios.post('http://localhost:8080/api/v1/games', gameData);
+        const response = await axios.post('/api/v1/games', gameData);
         if (response.status === 201) {
             navigate(`/game/${response.data.uuid}`);
         }

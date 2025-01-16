@@ -24,7 +24,7 @@ const GameEditDialog = ({ isOpen, onClose, game }) => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/games/${game.uuid}`, {
+            const response = await fetch(`/api/v1/games/${game.uuid}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

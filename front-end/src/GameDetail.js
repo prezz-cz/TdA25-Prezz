@@ -17,7 +17,7 @@ const GameDetail = () => {
   useEffect(() => {
     const fetchGame = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/v1/games/${uuid}`);
+        const response = await fetch(`/api/v1/games/${uuid}`);
         if (response.ok) {
           const data = await response.json();
           setFoundGame(data);
@@ -37,7 +37,7 @@ const GameDetail = () => {
 
   const deleteGame = async (uuid) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/games/${uuid}`, {
+      const response = await fetch(`/api/v1/games/${uuid}`, {
         method: "DELETE",
       });
 
@@ -60,7 +60,7 @@ const GameDetail = () => {
       return;
     }
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/games/${foundGame.uuid}`, {
+      const response = await fetch(`/api/v1/games/${foundGame.uuid}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
