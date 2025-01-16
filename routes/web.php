@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 use App\Http\Controllers\HelloController;
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,12 @@ use App\Http\Controllers\HelloController;
 |
 */
 //Povinne
-Route::get('/', [HelloController::class, 'view']);
+// Route::get('/', [HelloController::class, 'view']);
+
+Route::get('/', function(){ return File::get(public_path() . '/index.html');});
+Route::get('/{any}', function(){ return File::get(public_path() . '/index.html');});
+Route::get('/{any}/{any2}', function(){ return File::get(public_path() . '/index.html');});
+
 // Route::get('/games', [GameController::class, 'getAll']); 
 // Route::post('/games', [GameController::class, 'new']); 
 // Route::get('/games/new', [GameController::class, 'newForm']); 
