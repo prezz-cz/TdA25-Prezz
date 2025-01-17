@@ -36,7 +36,7 @@ Je žádoucí mít nainstalován potřebný software.
 ### 2. Příkaz do terminálu
 ```
 docker build . -t tda-laravel
-docker run -p 8080:80 -v "$(pwd)":/app tda-laravel
+docker run -p 8080:80 tda-laravel
 ```
 ### 3. Otevřít localhost
 Přejdi na adresu [http://localhost:8080](http://localhost:8080)
