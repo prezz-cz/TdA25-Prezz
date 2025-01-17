@@ -11,14 +11,12 @@ WORKDIR /app
 RUN apk add --update --no-cache bash mariadb mariadb-client \
     && rm -rf /var/cache/apk/*
 
-COPY --exclude=./start.sh . ./
+COPY . .
 
 RUN composer install --optimize-autoloader --no-dev --prefer-dist --no-suggest
 
 COPY --from=front-end /front-end/dist/ /app/public/
 COPY --from=front-end /front-end/dist/assets /app/public/
-
-COPY start.sh .
 
 EXPOSE 80
 VOLUME [ "/var/lib/mysql" ]
